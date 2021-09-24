@@ -135,7 +135,6 @@ function PageContent(props) {
 										<div className="card-header py-3">
 											<h6 className="m-0 font-weight-bold text-primary text-center">
 												Ether Price 
-												<span className="fas fa-sync-alt text-right text-gray-700 position-relative" style={{left: "30%"}} aria-hidden="true"></span>
 											</h6>
 										</div>
 										<div className="card-body">
