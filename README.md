@@ -1,21 +1,22 @@
 # Digital Wallet Dashboard Challenge
 
-### Run project:
+## Run project:
 
-1. Import database:
-  * In the root folder you can find a "digital-wallets.sql"
+### Import database:
+  * In the root folder you can find a *digital-wallets.sql*
   * Run the script to generate DB
 
-2. Run NestJS:
+### Run NestJS:
   1. In the app.module.ts file change the credentials to connect to DB.
-  2. Run "npm install" command on nestjs folder to install dependencies.
-  3. Run "npm run start" command on nestjs folder to get the server going.
+  2. Run *npm install* command on nestjs folder to install dependencies.
+  3. Run *npm run start* command on nestjs folder to get the server going.
 
-3. Run ReactJS:
+### Run ReactJS:
   1. Run "npm install" command on react folder to install dependencies.
   2. Run "npm start" command to get the server going.
-    * notice that both servers will try to run on localhost:3000, but react will ask you to change this by typing "yes" on the terminal
+  *notice that both servers will try to run on localhost:3000, but react will ask you to change this by typing "yes" on the terminal*
 
+---
 
 #### Thanks for the opportunity 
 
