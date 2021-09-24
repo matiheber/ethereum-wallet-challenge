@@ -34,4 +34,11 @@ export class WalletsApiService {
       map(response => response.data)
     )
   }
+
+  getEuroFee(){
+      return this.httpService.get(`http://api.exchangeratesapi.io/v1/latest?access_key=4cc70a1e6a903343d647a4ffa9faec76&symbols=USD`)
+      .pipe(
+          map(response => response.data)
+      )
+  }
 }

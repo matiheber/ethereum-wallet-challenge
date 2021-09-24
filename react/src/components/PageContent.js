@@ -4,30 +4,31 @@ import axios from 'axios';
 
 function PageContent(props) {
 	const [ wallets, setWallets ] = useState([]);
-	const [ walletAddress, setWalletAddress ] = useState();
-	const [ error, setError ] = useState();
+	const [ walletAddress, setWalletAddress ] = useState([]);
+	const [ error, setError ] = useState([]);
 	const [ ethPrice, setEthPrice ] = useState();
 	const [ euroFee, setEuroFee ] = useState();
 
 	useEffect(()=>{
+		usdEthFee();
 		async function fetchData() {
 			const result = await axios('http://localhost:3000/wallets');
-			return setWallets(result.data);
+			setWallets(result.data);
 		}
-		fetchData()
-		usdEthFee()
-		euroEthFee()
+		fetchData();
 	}, [])
 
 	const usdEthFee = async () => {
 		const price = await axios(`http://localhost:3000/walletsApi/price`);
 		setEthPrice(price.data.result.ethusd)
+		euroEthFee(price.data.result.ethusd);
 	}
 
-	const euroEthFee = async () => {
-		let euroFee = await axios.get(`http://api.exchangeratesapi.io/v1/latest?access_key=4cc70a1e6a903343d647a4ffa9faec76&symbols=USD`);
+	const euroEthFee = async (ethUsdFee) => {
+		let euroFee = await axios.get(`http://localhost:3000/walletsApi/euroPrice`);
 		euroFee = euroFee.data.rates.USD;
-		euroFee = parseFloat(ethPrice) / parseFloat(euroFee);
+		euroFee = ethUsdFee / euroFee;
+		euroFee = '' + euroFee;
 		setEuroFee(euroFee);
 	}
 	
@@ -113,7 +114,10 @@ function PageContent(props) {
 									<div className="mb-4">						
 										<div className="card shadow mb-4">
 											<div className="card-header py-3">
-												<h6 className="m-0 font-weight-bold text-primary text-center">Ether Price</h6>
+												<h6 className="m-0 font-weight-bold text-primary text-center">
+													Ether Price 
+													<span className="fas fa-sync-alt text-right text-gray-700 position-relative" style={{left: "30%"}} aria-hidden="true"></span>
+												</h6>
 											</div>
 											<div className="card-body">
 												<div className="d-flex flex-column align-items-center">

@@ -17,6 +17,11 @@ export class WalletsApiController {
     return this.walletsApiService.getEthPrice();
   }
 
+  @Get('/euroPrice')
+  getEuroFee(){
+    return this.walletsApiService.getEuroFee();
+  }
+
 
   @Get(':address')
   findOne(@Param('address') address: string) {
