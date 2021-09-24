@@ -1,6 +1,7 @@
-import { Controller, Get, Post, Body, Param } from '@nestjs/common';
+import { Controller, Get, Post, Body, Param, Put } from '@nestjs/common';
 import { WalletsService } from './wallets.service';
 import { CreateWalletDto } from './dto/create-wallet.dto';
+import { UpdateWalletDto } from './dto/update-wallet.dto';
 import { Wallet } from './wallet.model'
 
 @Controller('wallets')
@@ -11,9 +12,7 @@ export class WalletsController {
 
   @Post('/create')
   create(@Body() createWalletDto: CreateWalletDto): Promise<Wallet>{
-    console.log(createWalletDto);
-    
-    return this.walletsService.create(createWalletDto);
+      return this.walletsService.create(createWalletDto);
   }
 
   @Get()
@@ -21,21 +20,9 @@ export class WalletsController {
     return this.walletsService.findAll();
   }
 
-  
-  // @Get('/transaction/:address')
-  // isOld(@Param('address') address: string) {
-  //   return this.walletsService.isOld(address);
-  // }
-  
-  // @Get('/price')
-  // getEthPrice(){
-  //   return this.walletsService.getEthPrice();
-  // }
-
-
-  // @Get(':address')
-  // findOne(@Param('address') address: string) {
-  //   return this.walletsService.findOne(address);  
-  // }
+  @Put(':id')
+  update(@Param('id') id: number, @Body('favorite') favorite: boolean, updateWalletDto: UpdateWalletDto): Promise<any> {
+    return this.walletsService.update(id, favorite);
+  }
   
 }

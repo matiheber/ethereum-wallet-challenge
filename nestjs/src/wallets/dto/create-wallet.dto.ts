@@ -3,4 +3,5 @@ export class CreateWalletDto {
     address: string;
     balance: string;
     old: boolean;
+    favorite: boolean;
 }

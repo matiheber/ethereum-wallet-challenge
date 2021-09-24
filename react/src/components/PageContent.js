@@ -8,6 +8,7 @@ function PageContent(props) {
 	const [ error, setError ] = useState([]);
 	const [ ethPrice, setEthPrice ] = useState();
 	const [ euroFee, setEuroFee ] = useState();
+	
 
 	useEffect(()=>{
 		usdEthFee();
@@ -62,9 +63,6 @@ function PageContent(props) {
 
 	const saveWallet = async (wallet) => {
 		const response = await axios.post(`http://localhost:3000/wallets/create`, wallet)
-		if (response) {
-			console.log('Wallet guardada ', wallet);
-		}
 	}
 
 	const walletInput = (e) => {
@@ -85,50 +83,71 @@ function PageContent(props) {
 		return result
 	}
 
+	const updateFavorites = async (favoriteStatus, id) => {
+       	axios.put(`http://localhost:3000/wallets/${id}`, {favorite: favoriteStatus})
+       .then(response => {
+		   wallets.forEach(element => {
+			   if (element.id === response.data.id) {
+				   element.favorite = favoriteStatus;
+			   }
+		   });
+		   setWallets(wallets)
+	   })
+    }
+
+	const sortFavorites = () => {
+		let newOrder = [...wallets];
+		newOrder = newOrder.sort((a,b)=> a.favorite > b.favorite ? -1 : 1);
+		setWallets(newOrder);
+	}
+
 		return (
 			<React.Fragment>
 
 				
 					<div className="container-fluid">
 
-							<h1 className="text-center mb-0 text-gray-800">List of wallets</h1>
+							<h1 className="text-center mb-4 text-gray-800">List of wallets</h1>
 
 						<div className="row">
 							<div className="col-lg-9 mb-4">
+								<div className="mb-3 d-flex flex-column align-items-start ml-2">
+									<button className="btn btn-primary" onClick={()=>sortFavorites()}>Order by favorites</button>
+								</div>
 								{wallets.map((wallet, idx) => {
-									return <Card key={idx} wallet={wallet} ethPrice={ethPrice} convertTo={convertTo} euroFee={euroFee}/>
+									return <Card key={wallet.id} wallet={wallet} ethPrice={ethPrice} convertTo={convertTo} euroFee={euroFee} updateFavorites={updateFavorites}/>
 								})}
 								
 							</div>	
 
 					
 							<div className="d-sm-flex flex-column col-lg-3 mb-4">
-								
-									<div className="mb-3 d-flex flex-column align-items-end">
-										<label htmlFor="addressInput" className="form-label">Enter a wallet address to add:</label>
-										<input  type="text" className="form-control" id="addressInput" name="address" placeholder="0xde0B295669a9FD93d5F28D9Ec85E40f4cb697BAe" onChange ={ (e)=> walletInput(e) } />
-										<div><span className="badge badge-danger">{ error  ? error.type === 'address' ? error.message : '' : '' }</span></div>									
-										<button type="submit" className="btn btn-primary mt-2"  onClick={()=> searchWallet() }>Add</button>
-									</div>
-									
-									<div className="mb-4">						
-										<div className="card shadow mb-4">
-											<div className="card-header py-3">
-												<h6 className="m-0 font-weight-bold text-primary text-center">
-													Ether Price 
-													<span className="fas fa-sync-alt text-right text-gray-700 position-relative" style={{left: "30%"}} aria-hidden="true"></span>
-												</h6>
-											</div>
-											<div className="card-body">
-												<div className="d-flex flex-column align-items-center">
-		
-													<h6 className="m-0 font-weight-bold text-center">{convertTo(ethPrice, 'USD')} USD</h6>
-													<h6 className="m-0 font-weight-bold text-center">{convertTo(euroFee, 'EUR')} Euro</h6>
 
-												</div>
+								<div className="mb-3 d-flex flex-column align-items-end">
+									<label htmlFor="addressInput" className="form-label">Enter a wallet address to add:</label>
+									<input  type="text" className="form-control" id="addressInput" name="address" placeholder="0xde0B295669a9FD93d5F28D9Ec85E40f4cb697BAe" onChange ={ (e)=> walletInput(e) } />
+									<div><span className="badge badge-danger">{ error  ? error.type === 'address' ? error.message : '' : '' }</span></div>									
+									<button type="submit" className="btn btn-primary mt-2"  onClick={()=> searchWallet() }>Add</button>
+								</div>
+								
+								<div className="mb-4">						
+									<div className="card shadow mb-4">
+										<div className="card-header py-3">
+											<h6 className="m-0 font-weight-bold text-primary text-center">
+												Ether Price 
+												<span className="fas fa-sync-alt text-right text-gray-700 position-relative" style={{left: "30%"}} aria-hidden="true"></span>
+											</h6>
+										</div>
+										<div className="card-body">
+											<div className="d-flex flex-column align-items-center">
+	
+												<h6 className="m-0 font-weight-bold text-center">{convertTo(ethPrice, 'USD')} USD</h6>
+												<h6 className="m-0 font-weight-bold text-center">{convertTo(euroFee, 'EUR')} Euro</h6>
+
 											</div>
 										</div>
 									</div>
+								</div>
 							</div>
 						
 

@@ -22,9 +22,11 @@ export class Wallet extends Model<Wallet> {
   @Column
   balance: string;
 
-
   @Column
   old: boolean;
+
+  @Column
+  favorite: boolean;
 
   @CreatedAt public createdAt: Date;
 

@@ -1,12 +1,13 @@
+import axios from "axios";
 import { useState, useEffect } from "react";
 
 function Card(props) {
     const [currency, setCurrency] = useState('Ether');
     const [OriginalBalance] = useState(props.wallet.balance);
     const [showBalance, setShowBalance] = useState(props.wallet.balance);
-    const [fee, setFee] = useState();
+    const [fee, setFee] = useState([]);
     const [originalFee, setOriginalFee] = useState();
-    const [favorites, setFavorites] = useState();
+    const [favorite, setFavorite] = useState(props.wallet.favorite);
 
     
     useEffect(()=>{
@@ -89,13 +90,19 @@ function Card(props) {
         formatCurrency(c)
     }
 
-    const newFavorite = () => {
-        if (favorites) {
-            setFavorites(false)
+    const newFavorite = async () => {
+        let newFavoriteStatus;
+        if (favorite === true) {
+            setFavorite(false)
+            newFavoriteStatus = false;
         } else {
-            setFavorites(true)
+            setFavorite(true)
+            newFavoriteStatus = true;
         }
+        props.updateFavorites(newFavoriteStatus, props.wallet.id);
     }
+
+
 
         return (
             <div className="col-md-12 mb-4">
@@ -107,10 +114,10 @@ function Card(props) {
                                 <div className="h5 mb-0 font-weight-bold text-gray-800">Balance: {showBalance + ' ' + currency}</div>
                             </div>
                             <div className="col-auto">
-                            <div className=" text-center">
-                               <i className={`fa-heart fa-2x ${favorites ? 'fas text-danger' : 'far'}`} onClick={()=>newFavorite()}></i>
+                            <div className="d-flex align-items-center">
+                               <i className={`fa-heart fa-2x ${favorite === true ? 'fas text-danger' : 'far'}`} onClick={()=>newFavorite()}></i>
                             </div>
-                                {props.wallet.old ?<div><span className="badge badge-warning">OLD</span></div> : '' }
+                                {props.wallet.old ?<div className="d-flex align-items-center"><span className="badge badge-warning my-1">OLD</span></div> : '' }
                                 <i className="fas fa-wallet fa-2x text-gray-300"></i>
                             </div>
                         </div>
